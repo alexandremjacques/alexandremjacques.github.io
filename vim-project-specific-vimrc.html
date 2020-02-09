@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="https://alexandremjacques.github.io/theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="https://alexandremjacques.github.io/theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://alexandremjacques.github.io/theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=PT+Sans|PT+Serif|PT+Mono">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Alexandre Jacques">
+  <meta name="description" content="Posts and writings by Alexandre Jacques">
+
+  <link href="https://alexandremjacques.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Today I Learned Atom" />
+
+<meta name="keywords" content="vim, dotfiles, project">
+
+  <title>
+    Today I Learned
+&ndash; Vim allows you to have a project specific .vimrc file  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <a href="https://alexandremjacques.github.io">
+        <img src="/images/me.png" alt="logo">
+      </a>
+      <h2><a href="https://alexandremjacques.github.io">Today I Learned</a></h2>
+      <p>Random thoughts and discoveries. Maybe, just maybe, some good stuff about development and agile methodology.</p>
+      <ul>
+        <li><a href="https://alexandremjacques.github.io/category/vim.html">VIM</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href="https://alexandremjacques.github.io">Index</a> &brvbar; <a href="https://alexandremjacques.github.io/archives.html">Archives</a>
+      &brvbar; <a href="https://alexandremjacques.github.io/feeds/all.atom.xml">Atom</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="https://alexandremjacques.github.io/vim-project-specific-vimrc.html">Vim allows you to have a project specific .vimrc file</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Sun 09 February 2020</p>
+  </div>
+  <div class="article_text">
+    <p>This is interesting for some scenarios where you would prefer to keep things configured differently for a single project.</p>
+<p>Actually, it's super simple to configure:</p>
+<ol>
+<li>
+<p>Enable this feature by adding this to your main (located at your <code>$HOME</code>) <code>.vimrc</code>:</p>
+<div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">exrc</span>
+</pre></div>
+
+
+</li>
+<li>
+<p>Then you need to create your specific project <code>.vimrc</code> file configuration in the root of your project folder.</p>
+</li>
+</ol>
+<p>Hope it helps. :)</p>
+  </div>
+  <div class="article_meta">
+    <p>Category: <a href="https://alexandremjacques.github.io/category/vim.html">VIM</a>
+ &ndash; Tags:
+      <a href="https://alexandremjacques.github.io/tag/vim.html">vim</a>,      <a href="https://alexandremjacques.github.io/tag/dotfiles.html">dotfiles</a>,      <a href="https://alexandremjacques.github.io/tag/project.html">project</a>    </p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Alexandre Jacques. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Giulio Fidente on <a href="https://github.com/gfidente/pelican-svbhack" target="_blank">github</a>. </p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Today I Learned - VIM</title><link href="https://alexandremjacques.github.io/" rel="alternate"></link><link href="https://alexandremjacques.github.io/feeds/vim.atom.xml" rel="self"></link><id>https://alexandremjacques.github.io/</id><updated>2020-02-09T13:03:00-03:00</updated><entry><title>Vim allows you to have a project specific .vimrc file</title><link href="https://alexandremjacques.github.io/vim-project-specific-vimrc.html" rel="alternate"></link><published>2020-02-09T13:03:00-03:00</published><updated>2020-02-09T13:03:00-03:00</updated><author><name>Alexandre Jacques</name></author><id>tag:alexandremjacques.github.io,2020-02-09:/vim-project-specific-vimrc.html</id><summary type="html">&lt;p&gt;Vim allows you to have a project specific .vimrc file. This facilitates some scenarios.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is interesting for some scenarios where you would prefer to keep things configured differently for a single project.&lt;/p&gt;
+&lt;p&gt;Actually, it's super simple to configure:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Enable this feature by adding this to your main (located at your &lt;code&gt;$HOME&lt;/code&gt;) &lt;code&gt;.vimrc&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="n"&gt;exrc&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Then you need to create your specific project &lt;code&gt;.vimrc&lt;/code&gt; file configuration in the root of your project folder.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Hope it helps. :)&lt;/p&gt;</content><category term="VIM"></category><category term="vim"></category><category term="dotfiles"></category><category term="project"></category></entry></feed>
