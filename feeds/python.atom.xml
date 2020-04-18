@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Today I Learned</title><link href="https://alexandremjacques.github.io/" rel="alternate"></link><link href="https://alexandremjacques.github.io/feeds/all.atom.xml" rel="self"></link><id>https://alexandremjacques.github.io/</id><updated>2020-05-18T19:19:00-03:00</updated><entry><title>Django (DRF) 12 Factor App with examples</title><link href="https://alexandremjacques.github.io/12-factor-apps-django-with-examples.html" rel="alternate"></link><published>2020-05-18T19:19:00-03:00</published><updated>2020-05-18T19:19:00-03:00</updated><author><name>Alexandre Jacques</name></author><id>tag:alexandremjacques.github.io,2020-05-18:/12-factor-apps-django-with-examples.html</id><summary type="html">&lt;p&gt;I've been working with Django (especially with DRF) for a while now. Deploying Django apps is the one thing...&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've been working with Django (especially with DRF) for a while now. Deploying Django apps is the one thing
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Today I Learned - Python</title><link href="https://alexandremjacques.github.io/" rel="alternate"></link><link href="https://alexandremjacques.github.io/feeds/python.atom.xml" rel="self"></link><id>https://alexandremjacques.github.io/</id><updated>2020-05-18T19:19:00-03:00</updated><entry><title>Django (DRF) 12 Factor App with examples</title><link href="https://alexandremjacques.github.io/12-factor-apps-django-with-examples.html" rel="alternate"></link><published>2020-05-18T19:19:00-03:00</published><updated>2020-05-18T19:19:00-03:00</updated><author><name>Alexandre Jacques</name></author><id>tag:alexandremjacques.github.io,2020-05-18:/12-factor-apps-django-with-examples.html</id><summary type="html">&lt;p&gt;I've been working with Django (especially with DRF) for a while now. Deploying Django apps is the one thing...&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've been working with Django (especially with DRF) for a while now. Deploying Django apps is the one thing
 that bothers me the most. It's hard and does not have a pattern. So I decided to build a guide here to keep notes for
 myself and may help anyone that is struggling with the lack of patterns out there.&lt;/p&gt;
 &lt;h3&gt;What is and why 12 Factors App?&lt;/h3&gt;
@@ -276,33 +276,4 @@ you can install the needed tools changing the &lt;code&gt;Dockerfile&lt;/code&gt
 great way to learn some stuff new and useful. Its definitly not the end of it. Sure I can evolve this to something
 better.&lt;/p&gt;
 &lt;p&gt;And by putting it together I hope I can help, or give some ideas, to someone it trouble trying to figure some of this
-out.&lt;/p&gt;</content><category term="Python"></category><category term="django"></category><category term="security"></category><category term="12 factor"></category></entry><entry><title>Now, a Scrum.org PSD I and PSM I Certified</title><link href="https://alexandremjacques.github.io/scrum-org-psmi-certified.html" rel="alternate"></link><published>2020-04-10T19:19:00-03:00</published><updated>2020-04-10T19:19:00-03:00</updated><author><name>Alexandre Jacques</name></author><id>tag:alexandremjacques.github.io,2020-04-10:/scrum-org-psmi-certified.html</id><summary type="html">&lt;p&gt;Since before I started working at &lt;a href="https://agile.inc"&gt;Agile.Inc&lt;/a&gt;, around Dec/2019, I was aiming to...&lt;/p&gt;</summary><content type="html">&lt;p&gt;Since before I started working at &lt;a href="https://agile.inc"&gt;Agile.Inc&lt;/a&gt;, around Dec/2019, I was aiming to get certified. Before
-Agile.Inc I was a consultant for &lt;a href="https://accenture.com"&gt;Accenture&lt;/a&gt; for almost a full year.&lt;/p&gt;
-&lt;p&gt;There I was consulting for a financial institution that was moving to a agile mindset. Not that they were near to
-achieve something close to it but, as a requirement to me to be working there as a tech leader (whatever that means) I
-was being requested to get PSM I certified.&lt;/p&gt;
-&lt;p&gt;Agile.Inc is a &lt;a href="https://scrum.org"&gt;Scrum.org&lt;/a&gt; official training partner and, not only that, all 4 Agile.Inc owners are offical
-trainers for Scrum.org.&lt;/p&gt;
-&lt;p&gt;And, being an employee, I get to participate on the official trainings free of charge. Official trainings also offers
-free certification vouchers for participants (vouchers - plural - because you get 2 attempts to get certified).&lt;/p&gt;
-&lt;p&gt;So, I took trainings for the Professional Scrum Developer and for the Professional Scrum Master. Both trainings took
-place at Agile.Inc offices and were awesome. They are actually great guides for the certifications.&lt;/p&gt;
-&lt;p&gt;Agile methodologies are a thing here in Brazil. It's something that every company that is hiring is asking candidates to
-be, at least, aware of. I may be wrong since I'm not an expert but it seems that agile is still a bit behind on US and
-Europe in terms of adoption.&lt;/p&gt;
-&lt;p&gt;I am not a huge fan of Scrum. I'm more of a XP Programming fellow. But, since both drink from the same fountain, it's
-ok. I think that, as long as your business have an agile mindset, you're safe (not SAFe - winkle).&lt;/p&gt;</content><category term="Agile Methodolody"></category><category term="scrum"></category><category term="xp programming"></category><category term="certification"></category></entry><entry><title>Vim allows you to have a project specific .vimrc file</title><link href="https://alexandremjacques.github.io/vim-project-specific-vimrc.html" rel="alternate"></link><published>2020-02-09T13:03:00-03:00</published><updated>2020-02-09T13:03:00-03:00</updated><author><name>Alexandre Jacques</name></author><id>tag:alexandremjacques.github.io,2020-02-09:/vim-project-specific-vimrc.html</id><summary type="html">&lt;p&gt;Vim allows you to have a project specific .vimrc file. This facilitates some scenarios.&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is interesting for some scenarios where you would prefer to keep things configured differently for a single project.&lt;/p&gt;
-&lt;p&gt;Actually, it's super simple to configure:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;Enable this feature by adding this to your main (located at your &lt;code&gt;$HOME&lt;/code&gt;) &lt;code&gt;.vimrc&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="n"&gt;exrc&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Then you need to create your specific project &lt;code&gt;.vimrc&lt;/code&gt; file configuration in the root of your project folder.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Hope it helps. :)&lt;/p&gt;</content><category term="VIM"></category><category term="vim"></category><category term="dotfiles"></category><category term="project"></category></entry></feed>
+out.&lt;/p&gt;</content><category term="Python"></category><category term="django"></category><category term="security"></category><category term="12 factor"></category></entry></feed>

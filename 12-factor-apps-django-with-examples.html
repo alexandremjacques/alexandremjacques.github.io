@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="https://alexandremjacques.github.io/theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="https://alexandremjacques.github.io/theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://alexandremjacques.github.io/theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=PT+Sans|PT+Serif|PT+Mono">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Alexandre Jacques">
+  <meta name="description" content="Posts and writings by Alexandre Jacques">
+
+  <link href="https://alexandremjacques.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Today I Learned Atom" />
+
+  <script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101235459);</script>
+  <script async src="//static.getclicky.com/js"></script>
+
+<meta name="keywords" content="django, security, 12 factor">
+
+  <title>
+    Today I Learned
+&ndash; Django (DRF) 12 Factor App with examples  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <a href="https://alexandremjacques.github.io">
+        <img src="/images/me.png" alt="logo">
+      </a>
+      <h2><a href="https://alexandremjacques.github.io">Today I Learned</a></h2>
+      <p>Random thoughts and discoveries. Maybe, just maybe, some good stuff about development and agile methodology.</p>
+      <ul>
+        <li><a href="https://alexandremjacques.github.io/category/agile-methodolody.html">Agile Methodolody</a></li>
+        <li><a href="https://alexandremjacques.github.io/category/python.html">Python</a></li>
+        <li><a href="https://alexandremjacques.github.io/category/vim.html">VIM</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href="https://alexandremjacques.github.io">Index</a> &brvbar; <a href="https://alexandremjacques.github.io/archives.html">Archives</a>
+      &brvbar; <a href="https://alexandremjacques.github.io/feeds/all.atom.xml">Atom</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="https://alexandremjacques.github.io/12-factor-apps-django-with-examples.html">Django (DRF) 12 Factor App with examples</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Mon 18 May 2020</p>
+  </div>
+  <div class="article_text">
+    <p>I've been working with Django (especially with DRF) for a while now. Deploying Django apps is the one thing
+that bothers me the most. It's hard and does not have a pattern. So I decided to build a guide here to keep notes for
+myself and may help anyone that is struggling with the lack of patterns out there.</p>
+<h3>What is and why 12 Factors App?</h3>
+<p><a href="https://12factor.net/">The Twelve-Factor App</a> is a methodology for building SaaS apps. The main concern is to keep
+everything as isolated and as secure as possible. It was first presented by Heroku in 2011 and is still referenced as a
+good guide for best practices in building and deploying apps.</p>
+<h3>Tools used on this guide:</h3>
+<ul>
+<li>Gitlab CI</li>
+<li>VIM (my main editor)</li>
+<li>Django and friends (special mention to python-decouple)</li>
+<li>
+<p>Assumes the bellow project structure (that I try to keep for all my projects)</p>
+<p><pre>
+├── Dockerfile
+├── apps
+│   ├── app1
+│   └── app2
+├── config
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── docker-compose.yml
+├── docker-entrypoint.sh
+├── manage.py
+├── requirements
+│   ├── dev-requirements.in
+│   └── requirements.in
+└── requirements.txt
+</pre></p>
+</li>
+</ul>
+<p>So, without further ado, to the guide!</p>
+<blockquote>
+<p>Each factor title has a link to its explanation on the original site. Remember: all things explained here can be
+ported to other CI/CD environments and to other languages.</p>
+</blockquote>
+<h3><a href="https://12factor.net/codebase">1. Codebase - One codebase tracked in revision control, many deploys</a></h3>
+<p>My approach is to use <a href="https://nvie.com/posts/a-successful-git-branching-model/">Gitflow</a>. There are some variations on
+this but, since Gitflow envisions different branches for different phases of your app, it's easy to create <code>git hooks</code>
+to start a build and/or a deploy.</p>
+<p>Since I'm using Gitlab CI, hooks are "translated" to the <code>only</code> tag on <code>.glitlab-ci.yml</code> configuration file. Examining
+the example file bellow, notice the <code>only</code> tag. It informs Gitlab CI to only execute this task on commits to the
+branches list:</p>
+<div class="highlight"><pre><span></span><code><span class="n">image</span><span class="o">:</span> <span class="n">gitlab</span><span class="o">/</span><span class="n">dind</span>
+
+<span class="n">stages</span><span class="o">:</span>
+  <span class="o">-</span> <span class="n">build</span>
+  <span class="o">-</span> <span class="n">deploy</span>
+
+<span class="n">run_build</span><span class="o">:</span>
+  <span class="n">stage</span><span class="o">:</span> <span class="n">build</span>
+  <span class="n">only</span><span class="o">:</span>
+    <span class="o">-</span> <span class="n">master</span>
+    <span class="o">-</span> <span class="n">develop</span>
+
+<span class="n">run_deploy</span><span class="o">:</span>
+  <span class="n">stage</span><span class="o">:</span> <span class="n">deploy</span>
+  <span class="n">only</span><span class="o">:</span>
+    <span class="o">-</span> <span class="n">master</span>
+</code></pre></div>
+
+
+<h3><a href="https://12factor.net/dependencies">2. Dependencies - Explicitly declare and isolate dependencies</a></h3>
+<p>Recently I migrated my projects to <code>pip-tools</code>. Before the migration I was using <code>pip</code> but the workflow for managing
+development/production dependencies was not working for me. So now, I have a <code>/requirements</code> directory on my project
+root with <code>dev-requirements.in</code> and <code>requirements.in</code>.</p>
+<p>The first line of my <code>dev-requirements.in</code> file includes <code>requirements.in</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="ow">in</span>
+<span class="n">flake8</span>
+<span class="n">isort</span>
+<span class="o">...</span>
+</code></pre></div>
+
+
+<p>So, for local development I can run:</p>
+<div class="highlight"><pre><span></span><code>pip-compile requirements/dev-requirements.in -o ./requirements.txt
+pip-sync
+</code></pre></div>
+
+
+<p>And have both dev/production dependencies. In production, my pipeline has a slightly different <code>pip-compile</code>:</p>
+<div class="highlight"><pre><span></span><code>pip-compile requirements/requirements.in -o requirements.txt
+pip-sync
+</code></pre></div>
+
+
+<p>And there you have: no development dependencies.</p>
+<h3><a href="https://12factor.net/config">3. Config - Store config in the environment</a></h3>
+<p>Most of the "juice" of this workflow relies on this item. I have struggled for a while to find some kind of solution for
+Django <code>settings.py</code> environment separation. The great majority involves different files for each environment. But those
+solutions always ends up with sensitive information (<code>SECRET_KEYs</code>, database passwords, third-party app keys, etc.) in your version
+control system.</p>
+<p>As I mentioned in the begging of this guide, <code>python-decouple</code> comes to the rescue! </p>
+<blockquote>
+<p>There are other packages that does similar job - it's just a personal preference to use <code>python-decouple</code>.</p>
+</blockquote>
+<p>The way Decouple works is simple: try to find the declared <code>KEYS</code> on the following places in this order:
+1. Environment variables
+2. <code>ini</code> or <code>.env</code> files
+3. Default argument passed to config</p>
+<p>So, to illustrate, take this <code>config/settings.py</code> file excerpt:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">Csv</span><span class="p">,</span> <span class="n">config</span>
+
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s1">&#39;ALLOWED_HOSTS&#39;</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="n">Csv</span><span class="p">())</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>If you have a <code>DEBUG=True</code> in your environment (exported on your Linux/macOS system or declared in your Windows preferences), <code>python-decouple</code> will read it, parse it to <code>boolean</code> and inject it
+in your <code>settings.py</code>. If it cannot find the <code>DEBUG</code> key in you environment, it will try to look for it in a <code>.env</code> (or <code>.ini</code>) file.</p>
+<p>In development, I keep an <code>.env</code> file in the root of my project. The <code>.env</code> file format is just key/value pairs:</p>
+<div class="highlight"><pre><span></span><code><span class="na">DEBUG</span><span class="o">=</span><span class="s">True</span>
+<span class="na">ALLOWED_HOSTS</span><span class="o">=</span><span class="s">localhost,127.0.0.1</span>
+<span class="na">SECRET_KEY</span><span class="o">=</span><span class="s">secret</span>
+</code></pre></div>
+
+
+<p>In production, I take advantage of Gitlab's CI environment settings. It allows me to declare the same key/value pairs
+and make it available to the build environment:</p>
+<p><img alt="Gitlab's CI environments variable example" src="https://alexandremjacques.github.io/images/gitlab_env_variables.png"></p>
+<p>This way, no database passwords, secrets or app keys ends up on your source control (to avoid deploying your <code>.env</code>
+files do production, add it to your <code>.gitignore</code> - even though it wouldn't be a big deal as <code>python-decouple</code> gives precedence to
+environment variables).</p>
+<h3><a href="https://12factor.net/backing-services">4. Backing services - Treat backing services as attached resources</a></h3>
+<p>Implementing #4 is easy if you implement #3. Since every external configuration, URL address, port binding, etc. should
+be in environment variables (or <code>.env</code> file, for that matter), it's already treated as an attached resource. It's quite
+simple to verify that, in my case. I just push code to my remote master branch and wait the Gitlab CI do its job. No need to change
+anything in code or config files. Just push code.</p>
+<h3><a href="https://12factor.net/build-release-run">5. Build, release, run - Strictly separate build and run stages</a></h3>
+<p>As described in factors #1 and #3, part of this problem is already solved. Still, there's an inherent problem since I'am
+using Docker/docker-compose to deply my apps. Due to Docker way of doing things, passing environment variable values to
+the build process is a little tricky.</p>
+<p>The secret is knowing how Dockerfile and docker-compose <code>environment</code> tag works.</p>
+<p>In production, I don't use <code>virtualenv</code>. It wouldn't make much sense since, by definition, a container is aleady an isolated
+"environment". Given that, my <code>Dockerfile</code> is usually pretty straight forward:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.8</span>
+
+<span class="k">ENV</span> PYTHONUNBUFFERED <span class="m">1</span>
+<span class="k">ENV</span> PYTHONDONTWRITEBYTECODE <span class="m">1</span>
+
+<span class="k">RUN</span> mkdir /code
+<span class="k">WORKDIR</span><span class="s"> /code/</span>
+<span class="k">ADD</span> . /code/
+
+<span class="k">RUN</span> pip install --upgrade pip <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    pip install pip-tools <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    pip-compile -q /code/requirements/requirements.in --output-file /code/requirements.txt <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    pip install --no-cache-dir -r /code/requirements.txt
+
+<span class="k">EXPOSE</span><span class="s"> 8001</span>
+</code></pre></div>
+
+
+<p>For everything to work right, my <code>docker-compose.yml</code> file looks like the following:</p>
+<div class="highlight"><pre><span></span><code>version: <span class="s1">&#39;3&#39;</span>
+
+services:
+  api:
+    image: image_name
+    build: .
+    ports:
+      - <span class="s2">&quot;8001:8001&quot;</span>
+    volumes:
+      - /var/www/sample_project/media:/code/media
+    entrypoint: sh docker-entrypoint.sh
+    environment:
+      - <span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>config.settings
+      - <span class="nv">SECRET_KEY</span><span class="o">=</span><span class="si">${</span><span class="nv">S_KEY</span><span class="si">}</span>
+      - <span class="nv">DEBUG</span><span class="o">=</span><span class="si">${</span><span class="nv">DEBUG</span><span class="si">}</span>
+      - <span class="nv">ALLOWED_HOSTS</span><span class="o">=</span><span class="si">${</span><span class="nv">ALLOWED_HOSTS</span><span class="si">}</span>
+      - <span class="nv">DATABASE_NAME</span><span class="o">=</span><span class="si">${</span><span class="nv">DB_NAME</span><span class="si">}</span>
+      - <span class="nv">DATABASE_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">DB_USER</span><span class="si">}</span>
+      - <span class="nv">DATABASE_PASSWORD</span><span class="o">=</span><span class="si">${</span><span class="nv">DB_PASSWORD</span><span class="si">}</span>
+      - <span class="nv">DATABASE_HOST</span><span class="o">=</span><span class="si">${</span><span class="nv">DB_HOST</span><span class="si">}</span>
+      - <span class="nv">DATABASE_PORT</span><span class="o">=</span><span class="si">${</span><span class="nv">DB_PORT</span><span class="si">}</span>
+</code></pre></div>
+
+
+<p>That means: docker-compose reads from the environment variables set in Gitlab CI the value of, for example,
+<code>${S_KEY}</code> and sets it on the Docker build environment under the key <code>SECRET_KEY</code>. It happens that, on my
+<code>settings.py</code> file, its the exact key <code>python-decouple</code> looks for.</p>
+<p>To simplify even more:</p>
+<blockquote>
+<p>CI environment variable --&gt; Docker enviroment variable --&gt; <code>settings.py</code></p>
+</blockquote>
+<p>To complete the process and follow the factor #5 premisses, your build pipeline should make a TAG on your source control
+before cloning/checkout the code and build it. This way you could track how and when a release was generated.</p>
+<h3><a href="https://12factor.net/processes">6. Processes - The app is executed in the execution environment as one or more processes.</a></h3>
+<p>This one has a little to do on how we build the app and much more on how we architect it. As I mentioned before, I
+mainly work with DRF (Django REST Framework) to build REST APIs for web and mobile clients.</p>
+<p>This usually means that I rely on JWT tokens to keep "sessions" on my apps. Since no sticky sessions are needed and
+my APIs don't have a meaninful state, I'm covered on this item. But, in case I needed some kind of server-side state, I
+once relied on Redis to do that. Just remember to keep Redis server address, port and credentials on your configuration
+environment (<code>.env</code> file and/or environment variables).</p>
+<p>That all means that, if needed, this whole setup can scale horizontaly by just spanning more processes (containers in
+this case).</p>
+<h3><a href="https://12factor.net/port-binding">7. Port binding - Export services via port binding</a></h3>
+<p>As seen on my <code>Dockerfile</code> and my <code>docker-compose.yml</code> files, I export the <code>8001</code> port to the operational system. That
+means my services are accesible through that port. Although its possible and valid keep things this way, its usual to
+have a proxy (a reverse proxy) in front of my services.</p>
+<p>For that I have to configure 2 things: a gunicorn WSGI server and a Nginx proxy.</p>
+<p>The first one, the Gunicorn server, is configured by the <code>docker-entrypoint.sh</code> script (notice that this script is
+called by the <code>docker-compose.yml</code> on <code>entrypoint</code> tag):</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+python manage.py collectstatic --noinput
+python manage.py migrate
+
+gunicorn -b <span class="m">0</span>.0.0.0:8001 -w <span class="m">4</span> config.wsgi:application
+</code></pre></div>
+
+
+<p>This means that, on execution, docker-compose builds the container and run this script to start the container execution.
+Gunicorn in binding on port <code>8001</code> which is exposed to the host operational system on the same port. If needed, we could
+change that by changing the <code>ports</code> on <code>docker-compose.yml</code> file.</p>
+<p>The second step is to configure a proxy server. My setup already have a Nginx server running on an VPS instance and its
+not containerized. That's by design since I can move the API container to a cloud provider and have the another kind of
+reverse proxy pointing to my API container (and that's why my docker-compose don't start a proxy service inside the
+container).</p>
+<p>Configuring a Nginx as a reverse proxy is very straight forward:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">server</span> <span class="p">{</span>
+   <span class="err">listen</span> <span class="err">80</span><span class="p">;</span>
+   <span class="n">listen</span> <span class="cp">[</span><span class="p">::</span><span class="cp">]</span><span class="p">:</span><span class="mi">80</span><span class="p">;</span>
+   <span class="err">server_name</span> <span class="err">api.server.com</span><span class="p">;</span>
+
+   <span class="err">location</span> <span class="err">/</span> <span class="err">{</span>
+       <span class="err">proxy_read_timeout</span> <span class="err">360</span><span class="p">;</span>
+       <span class="err">proxy_set_header</span> <span class="err">Host</span> <span class="err">$host</span><span class="p">;</span>
+       <span class="err">proxy_set_header</span> <span class="err">X-Forwarded-For</span> <span class="err">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+       <span class="err">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="o">:</span><span class="mi">8001</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="err">}</span>
+</code></pre></div>
+
+
+<p>And that's it. Now requests made to port <code>80</code> gets proxied to <code>8001</code> (the container!).</p>
+<h3><a href="https://12factor.net/concurrency">8. Concurrency - Scale out via the process model</a></h3>
+<p>As stated before, this whole setup is based on Docker and is stateless. That means its scalable via processes. I'm not
+an expert on cloud but, I bet that with minimal changes to port bindings (and network definitions on containers), this setup can run on Kubernetes or some sort
+of container manager.</p>
+<h3><a href="https://12factor.net/disposability">9. Disposability - Maximize robustness with fast startup and graceful shutdown</a></h3>
+<p>Again, since factor #8 is covered, this one is easy. Kill and restart the process or any container process and you still have a
+new container ready to receive requests. Of course this spawning of containers must be managed by some kind of container
+manager.</p>
+<p>Just have to check how Gunicorn manages SIGTERM graceful finalizations.</p>
+<h3><a href="https://12factor.net/dev-prod-parity">10. Dev/prod parity - Keep development, staging, and production as similar as possible</a></h3>
+<p>I don't use Docker on my development machine. But I could as easily as in production. In fact, during the process of
+building this setup, I had to validate my ideas and configurations. And, for that, I relied on running Docker and
+docker-compose locally.</p>
+<p>Notice that my database is not started inside the container as well. That's also by design. My production setup has a
+dedicated database server machine. And to keep the environment parity, I also have a database installation on my local
+machinei (but this could be another local container - I just happen to have an old installation already running). This 
+keeps things as similar as possible to my production environment and my configuration "compliant" with factor #4.</p>
+<h3><a href="https://12factor.net/logs">11. Logs - Treat logs as event streams</a></h3>
+<p>That's one missing piece on my setup. I just don't log. I mean, on my development machine I log some stuff for
+debugging purposes. In production, I don't have any kind of application logs. I can, in fact, peek inside de container
+and see the container and Gunicorn logs, but that's all.</p>
+<p>Ideally I should use a third-party log service but, for now, it's still too expensive for my budget.</p>
+<h3><a href="https://12factor.net/admin-processes">12. Admin processes - Run admin/management tasks as one-off processes</a></h3>
+<p>This one I achieve with the help of Docker. We can easily run REPL commands inside the container, e.g.:</p>
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> -it &lt;container id&gt; python manage.py makemigrations
+</code></pre></div>
+
+
+<p>It may vary depending on the chosen Docker image but the idea is that, even with a leaner image (like an *-alpine one),
+you can install the needed tools changing the <code>Dockerfile</code> file.</p>
+<h3>Conclusion</h3>
+<p>I find it nice to have some kind of best practices already defined and battle tested. Applying it to my stack was a
+great way to learn some stuff new and useful. Its definitly not the end of it. Sure I can evolve this to something
+better.</p>
+<p>And by putting it together I hope I can help, or give some ideas, to someone it trouble trying to figure some of this
+out.</p>
+  </div>
+  <div class="article_meta">
+    <p>Category: <a href="https://alexandremjacques.github.io/category/python.html">Python</a>
+ &ndash; Tags:
+      <a href="https://alexandremjacques.github.io/tag/django.html">django</a>,      <a href="https://alexandremjacques.github.io/tag/security.html">security</a>,      <a href="https://alexandremjacques.github.io/tag/12-factor.html">12 factor</a>    </p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Alexandre Jacques. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Giulio Fidente on <a href="https://github.com/gfidente/pelican-svbhack" target="_blank">github</a>. </p>
+    </div>
+  </main>
+</body>
+</html>
