@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="https://alexandremjacques.github.io/theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+  <link rel="stylesheet" type="text/css" href="https://alexandremjacques.github.io/theme/css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://alexandremjacques.github.io/theme/css/pygments.css">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=PT+Sans|PT+Serif|PT+Mono">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Alexandre Jacques">
+  <meta name="description" content="Posts and writings by Alexandre Jacques">
+
+  <link href="https://alexandremjacques.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Today We Learned Atom" />
+
+  <script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101235459);</script>
+  <script async src="//static.getclicky.com/js"></script>
+
+<meta name="keywords" content="xp programming, programming, agile, modern">
+
+  <title>
+    Today We Learned
+&ndash; Feature Flags e porque são importantes  </title>
+
+</head>
+
+<body>
+  <aside>
+    <div id="user_meta">
+      <a href="https://alexandremjacques.github.io">
+        <img src="/images/me.png" alt="logo">
+      </a>
+      <h2><a href="https://alexandremjacques.github.io">Today We Learned</a></h2>
+      <p>Random thoughts and discoveries. Maybe, just maybe, some good stuff about development and agile methodology.</p>
+      <ul>
+        <li><a href="https://alexandremjacques.github.io/category/agile-methodolody.html">Agile Methodolody</a></li>
+        <li><a href="https://alexandremjacques.github.io/category/programming.html">Programming</a></li>
+        <li><a href="https://alexandremjacques.github.io/category/python.html">Python</a></li>
+        <li><a href="https://alexandremjacques.github.io/category/vim.html">VIM</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <p>
+      <a href="https://alexandremjacques.github.io">Index</a> &brvbar; <a href="https://alexandremjacques.github.io/archives.html">Archives</a>
+      &brvbar; <a href="https://alexandremjacques.github.io/feeds/all.atom.xml">Atom</a>
+      </p>
+    </header>
+
+<article>
+  <div class="article_title">
+    <h1><a href="https://alexandremjacques.github.io/feature-branching-and-why-it-is-important.html">Feature Flags e porque são importantes</a></h1>
+  </div>
+  <div class="article_meta">
+    <p>Posted on: Wed 24 June 2020</p>
+  </div>
+  <div class="article_text">
+    <h1>Flags vs Branching</h1>
+<p>Desenvolvimento baseado em <em>branches</em> permite que os desenvolvedores colaborem em torno de uma base central de código mantendo mudanças de uma funcionalidade isoladas na sua própria branch. Com a adição de <em>feature flags</em>, branches de funcionalidade se tornam ainda mais poderosas e gerenciáveis já que conseguimos separar a entrega de funcionalidades do deploy do código.</p>
+<h2>As dores de branches de longa duração</h2>
+<p>Tradicionalmente, o desenvolvimento de novas funcionalidades tem sido feito via branches. E, essas branches, dependendo da funcionalidade, podem perdurar por meses a fio com o restante do desenvolvimento do produto acontecendo em paralelo. Branches de vida longa normalmente criam um débito técnico do tipo "eu prometo que vou resolver esses conflitos depois". Isso se contrapõe com a premissas do Git que seriam: minimizar os problemas de conflitos de merge, falta de dependências e código duplicado. Pior, esses débitos aumentam proporcionalmente ao tempo de duração da branch. Então, acabamos concentrando esforços do time em resolver conflitos de merge. Para minimizar esse tipo de problema, branches combinadas com <em>feature flags</em> permitem que os desenvolvedores consigam gerenciar branches de forma efetiva e continuem entregando valor e software de qualidade.</p>
+<h2>Feature Branching</h2>
+<p>Como ajuda no processo de desenvolvimento, times de engenharia adotaram os DVCS - <em>sistemas de controle de versão distribuídos</em> - como o GitHub e Bitbucket. Esses sistemas permitem a colaboração de desenvolvedores em torno de uma base de código comum e fazem o uso de branches para o desenvolvimento de melhorias e novas funcionlidades. Esse modelo se tornou a base do ciclo de desenvolvimento moderno porque permite que os desenvolvedores não fiquem "se esbarrando" no progresso de outros desenvolvedores.</p>
+<p>Um problema desse modelo de feature branches é que o <strong>gerenciamento de releases</strong> fica diretamente relacionado ao deployment do código. Isoladamente, feature branching força os engenheiros a gerenciar as entregas dentro das limitações do sistema de versionamento. Usuários não-técnicos não conseguem (e não deveriam) gerenciar a liberação de funcionalidades a partir do sistema de controle de versão. E, nesse modelo, não é possível ligar e desligar funcionalidades em tempo real com o sistema já em produção.</p>
+<p><img alt="Branching sem FF" src="images/feature_branch_wo_ff.png"></p>
+<h2>Entra em cena <em>Feature Flags</em></h2>
+<p>É por isso que a introdução de <em>feature flags</em> faz com que o modelo de branching se torne interessante. FF (<em>feature flags</em>) permitem que os desenvolvedores tomem controle total do ciclo de vida de funcionalidades independente do deploy do código. Funcionalidades do sistema podem ser ligadas ou desligadas de forma independente da <strong>release</strong> ou rollback de versões.</p>
+<p>Esse processo é conhecido como <strong>Feature Flag Driven Development</strong>, onde os times de funcionalidades fazem entregas contínuas independentes de deploy de código.</p>
+<p><img alt="Branching sem FF" src="images/feature_branch_wt_ff.png"></p>
+<h2>Benefícios</h2>
+<p>Quando uma nova funcionalidade é mergeada para a branch principal (produção), ela já deveria estar acondicionada em uma FF. Isso permite que seja feito um deploy com a funcionalidade desligada e, gradualmente, liberada para os usuários finais. Isso permite também uma maneira rápida de desligar a funcionlidade em caso de defeito evitando assim, um novo deployment. Outros benefícios incluem:</p>
+<ul>
+<li><strong>Melhor comunicação do time</strong>: o trabalho é focado em novas funcionalidades e não em gerencimento de código, o time consegue garantir que todos estão coordenando esforços e entregando valor.</li>
+<li><strong>Deployments lógicos</strong>: liberação de código para produção mesmo que o desenvolvimento de uma nova funcionalidade não esteja totalmente completo pois vive numa branch de vida longa. Basta desligar a FF referente a ela e ainda assim a funcionalidade pode ser enviada.</li>
+<li><strong>Exposição de dependências</strong>: branchs que tem vida mais curta facilitam o gerenciamento de dependências eliminando as que não são mais necessárias.</li>
+<li><strong>Desenvolvimento mais rápido</strong>: não tendo que se preocupar com conflitos de merge e refatoração de código que eventualmente tenha quebrado devido a um merge mal-sucedido, o time pode forcar no desenvolvimento de novas funcionalidades que geram valor.</li>
+<li><strong>Mitigação de riscos</strong>: uma funcionalidade pode ser "flagada" durante todo o ciclo de desenvolvimento, desde a máquina do desenvolvedor, QA, staging e produção. Isso significa que ela pode ser ligada ou desligada de forma isolada e independente do ambiente e sem causar impactos.</li>
+<li><strong><em>Code reviews</em> melhores</strong>: como o merge de branches pode ser feito de forma contínua e em intervalos menores, os <em>code reviews</em> ficam menos tediosos e os conflitos de merge (lembrando que eles sempre vão existir) tem menos impacto.</li>
+</ul>
+<h2>E como funciona na prática?</h2>
+<p>A ilustração abaixo mostra, resumidamente, como um mecanismo de FF deve se comportar. Existem variações do modelo mostrado mas, basicamente, a ideia é a mesma: durante a inicialização ou execução do produto, um gerenciador de FF (FFM) deve ser consultado para determinar quais funcionalidades devem ser mostradas/ativas ou não. Idealmente o gerenciador deve ser capaz de configurar diversas flags, em diversos ambientes e diversas condições. Ex.: para o ambiente de desenvolvimento, a <strong>Feature A</strong> deve estar <strong>habilitada</strong> para os usuários que sejam do <strong>Tipo XYZ</strong>.</p>
+<p><img alt="Feature Flag" src="images/feature_flag.png"></p>
+<p>Essas confugurações podem ser mudadas a qualquer instante (por temos um gerenciador central) permitindo mudanças rápidas e sem necessidade de um novo deploy de código. </p>
+<h2>Juntos e melhores</h2>
+<p>Sistemas modernos de versionamento de código combinam os benefícios de branches e FFs. Ferramentas como GitHub ou Bitbucket permitem entrega contínua e branches de vida curta, enquanto FF ajudam na mitigação de riscos e gerencimento de <strong>releases</strong> e não de código.</p>
+<p>Portanto, FF <strong>não substituem branching</strong>. FFs são um aliado que dá poder e flexibilidade ao modelo de branching. Essa flexibilidade vem da capacidade de decidir quais, quando e para quem funcionalidades serão disponibilizadas.</p>
+  </div>
+  <div class="article_meta">
+    <p>Category: <a href="https://alexandremjacques.github.io/category/programming.html">Programming</a>
+ &ndash; Tags:
+      <a href="https://alexandremjacques.github.io/tag/xp-programming.html">xp programming</a>,      <a href="https://alexandremjacques.github.io/tag/programming.html">programming</a>,      <a href="https://alexandremjacques.github.io/tag/agile.html">agile</a>,      <a href="https://alexandremjacques.github.io/tag/modern.html">modern</a>    </p>
+  </div>
+
+
+</article>
+
+
+    <div id="ending_message">
+      <p>&copy; Alexandre Jacques. Built using <a href="http://getpelican.com" target="_blank">Pelican</a>. Theme by Giulio Fidente on <a href="https://github.com/gfidente/pelican-svbhack" target="_blank">github</a>. </p>
+    </div>
+  </main>
+</body>
+</html>
